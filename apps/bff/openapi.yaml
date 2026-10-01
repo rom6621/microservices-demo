@@ -1,0 +1,68 @@
+openapi: 3.1.0
+info:
+  title: Oneline Boutique BFF
+  version: 0.1.0
+
+paths:
+  /api/products:
+    get:
+      operationId: listProducts
+      summary: 商品一覧を取得する
+      responses:
+        "200":
+          description: 商品一覧
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductListResponse"
+
+components:
+  schemas:
+    ProductListResponse:
+      type: object
+      required: [products]
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+    Product:
+      type: object
+      required: [id, name, description, picture, price, categories]
+      properties:
+        id:
+          type: string
+          example: OLJCESPC7Z
+        name:
+          type: string
+          example: Sunglasses
+        description:
+          type: string
+          example: Add a modern touch to your outfits with these sleek aviator sunglasses.
+        picture:
+          type: string
+          format: uri
+          example: https://example.com/static/img/products/sunglasses.jpg
+        price:
+          $ref: "#/components/schemas/Money"
+        categories:
+          type: array
+          items:
+            type: string
+    Money:
+      type: object
+      required: [currencyCode, units, nanos]
+      properties:
+        currencyCode:
+          type: string
+          description: ISO4217準拠の通貨コード
+          example: USD
+        units:
+          type: string
+          description: 整数部分。int64を正確に表すため、文字列としている
+          example: "19"
+        nanos:
+          type: integer
+          format: int32
+          description: 少数部分 (10^-9単位)
+          example: 990000000

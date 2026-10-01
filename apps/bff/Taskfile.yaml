@@ -1,0 +1,22 @@
+version: "3"
+
+vars:
+  PROTO_DIR: ../../protos
+  OUT_DIR: src/gen
+
+tasks:
+  genproto:
+    desc: Generate TypeScript code from demo.proto
+    sources:
+      - "{{.PROTO_DIR}}/demo.proto"
+    generates:
+      - "{{.OUT_DIR}}/demo_pb.ts"
+    cmds:
+      - mkdir -p {{.OUT_DIR}}
+      - >-
+        protoc
+        --proto_path={{.PROTO_DIR}}
+        --plugin=protoc-gen-es=./node_modules/.bin/protoc-gen-es
+        --es_out={{.OUT_DIR}}
+        --es_opt=target=ts
+        {{.PROTO_DIR}}/demo.proto
