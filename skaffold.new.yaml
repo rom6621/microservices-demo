@@ -1,0 +1,29 @@
+apiVersion: skaffold/v4beta14
+kind: Config
+metadata:
+  name: microservices-demo
+build:
+  artifacts:
+    - image: productcatalogservice
+      context: services/productcatalogservice
+    - image: adservice
+      context: services/adservice
+  tagPolicy:
+    gitCommit: {}
+  local:
+    useBuildkit: true
+manifests:
+  rawYaml:
+    - kubernetes-manifests/productcatalogservice.yaml
+    - kubernetes-manifests/adservice.yaml
+deploy:
+  kubectl: {}
+portForward:
+  - resourceType: service
+    resourceName: productcatalogservice
+    port: 3550
+    localPort: 3550
+  - resourceType: service
+    resourceName: adservice
+    port: 9555
+    localPort: 9555
